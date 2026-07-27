@@ -1,4 +1,4 @@
--- Insert Brands first
+
 
 INSERT INTO brand
 (brand_name, made_in_origin)
@@ -21,7 +21,7 @@ VALUES
 ('Apple', 'USA');
 
 
--- Insert Products using brand_id
+
 
 INSERT INTO product 
 (product_name, description, price, model_number, warranty_date, brand_id, product_type, created_at)
