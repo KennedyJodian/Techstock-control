@@ -1,7 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
 
     <title>Products - TechStock Control</title>
 
@@ -10,196 +17,396 @@
 
 </head>
 
+<body class="bg-light">
 
-<body>
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<nav class="navbar navbar-dark bg-dark">
 
-    <div class="container">
+<!-- Main Content -->
+<main class="container py-5">
 
-        <a class="navbar-brand" href="/">
-            TechStock Control
-        </a>
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <a class="btn btn-outline-light" href="/add-product">
-            Add Product
+        <div>
+            <h1 class="fw-bold">
+                Electronics Inventory
+            </h1>
+
+            <p class="text-muted mb-0">
+                Browse and manage products stored in TechStock Control.
+            </p>
+        </div>
+
+        <a class="btn btn-primary"
+           th:href="@{/add-product}"
+           sec:authorize="isAuthenticated()">
+
+            + Add Product
+
         </a>
 
     </div>
 
-</nav>
 
+    <!-- Search and Filter -->
+    <div class="card shadow-sm border-0 mb-4">
 
-<div class="container mt-5">
+        <div class="card-body">
 
+            <form method="get"
+                  th:action="@{/products}"
+                  class="row g-3">
 
-    <h1>Electronics Inventory</h1>
+                <!-- Product Search -->
+                <div class="col-md-4">
 
-    <form method="get" action="/products" class="row mb-4">
+                    <label for="keyword"
+                           class="form-label fw-semibold">
 
+                        Product Name
 
-<div class="col-md-4">
+                    </label>
 
-<input type="text"
-       class="form-control"
-       name="keyword"
-       placeholder="Search product name"
-       th:value="${keyword}">
+                    <input type="text"
+                           id="keyword"
+                           class="form-control"
+                           name="keyword"
+                           placeholder="Search product name"
+                           th:value="${keyword}">
 
-</div>
+                </div>
 
 
-<div class="col-md-3">
+                <!-- Brand Filter -->
+                <div class="col-md-3">
 
-<select class="form-select" name="brand">
+                    <label for="brand"
+                           class="form-label fw-semibold">
 
-<option value="">
-All Brands
-</option>
+                        Brand
 
-<option value="Apple">
-Apple
-</option>
+                    </label>
 
-<option value="Samsung">
-Samsung
-</option>
+                    <select id="brand"
+                            class="form-select"
+                            name="brand">
 
-<option value="Dell">
-Dell
-</option>
+                        <option value="">
+                            All Brands
+                        </option>
 
-<option value="HP">
-HP
-</option>
+                        <option th:each="b : ${brands}"
+                                th:value="${b.brandName}"
+                                th:text="${b.brandName}"
+                                th:selected="${b.brandName == brand}">
+                            Dell
+                        </option>
 
-</select>
+                    </select>
 
-</div>
+                </div>
 
 
-<div class="col-md-3">
+                <!-- Sort -->
+                <div class="col-md-3">
 
-<select class="form-select" name="sortBy">
+                    <label for="sortBy"
+                           class="form-label fw-semibold">
 
-<option value="productName">
-Sort by Name
-</option>
+                        Sort By
 
-<option value="price">
-Sort by Price
-</option>
+                    </label>
 
-</select>
+                    <select id="sortBy"
+                            class="form-select"
+                            name="sortBy">
 
-</div>
+                        <option value="productName"
+                                th:selected="${sortBy == 'productName'}">
 
+                            Product Name
 
-<div class="col-md-2">
+                        </option>
 
-<button class="btn btn-primary">
-Search
-</button>
+                        <option value="price"
+                                th:selected="${sortBy == 'price'}">
 
-</div>
+                            Price
 
+                        </option>
 
-</form>
+                        <option value="warrantyDate"
+                                th:selected="${sortBy == 'warrantyDate'}">
 
+                            Warranty Date
 
-    <table class="table table-striped table-bordered mt-4">
+                        </option>
 
-        <thead class="table-dark">
+                        <option value="createdAt"
+                                th:selected="${sortBy == 'createdAt'}">
 
-        <tr>
+                            Date Added
 
-            <th>ID</th>
+                        </option>
 
-            <th>Product Name</th>
+                    </select>
 
-            <th>Description</th>
+                </div>
 
-            <th>Price</th>
 
-            <th>Model Number</th>
+                <!-- Search Button -->
+                <div class="col-md-2 d-flex align-items-end">
 
-            <th>Warranty Date</th>
+                    <button type="submit"
+                            class="btn btn-primary w-100">
 
-            <th>Brand</th>
+                        Search
 
-            <th>Type</th>
+                    </button>
 
-        </tr>
+                </div>
 
-        </thead>
+            </form>
 
+        </div>
 
-        <tbody>
+    </div>
 
 
-        <tr th:each="product : ${products.content}">
+    <!-- Results -->
+    <div class="card shadow-sm border-0">
 
+        <div class="card-body">
 
-            <td th:text="${product.productId}">
-            </td>
+            <div class="d-flex justify-content-between align-items-center mb-3">
 
+                <h4 class="mb-0">
+                    Products
+                </h4>
 
-            <td th:text="${product.productName}">
-            </td>
+                <span class="badge bg-primary"
+                      th:text="${products.totalElements + ' products'}">
 
+                    4 products
 
-            <td th:text="${product.description}">
-            </td>
+                </span>
 
+            </div>
 
-            <td th:text="${'$' + product.price}">
-            </td>
 
+            <!-- Product Table -->
+            <div class="table-responsive">
 
-            <td th:text="${product.modelNumber}">
-            </td>
+                <table class="table table-hover table-bordered align-middle">
 
+                    <thead class="table-dark">
 
-            <td th:text="${product.warrantyDate}">
-            </td>
+                    <tr>
 
+                        <th>ID</th>
 
-            <td th:text="${product.brand}">
-            </td>
+                        <th>Product</th>
 
+                        <th>Brand</th>
 
-            <td th:text="${product.productType}">
-            </td>
+                        <th>Type</th>
 
+                        <th>Model Number</th>
 
-        </tr>
+                        <th>Price</th>
 
+                        <th>Warranty</th>
 
-        </tbody>
+                        <th>Action</th>
 
+                    </tr>
 
-    </table>
+                    </thead>
 
-    <div class="mt-4">
 
-<a class="btn btn-secondary"
-   th:if="${products.hasPrevious()}"
-   th:href="@{/products(page=${products.number-1}, keyword=${keyword}, brand=${brand})}">
-Previous
-</a>
+                    <tbody>
 
+                    <!-- Products -->
+                    <tr th:each="product : ${products.content}">
 
-<a class="btn btn-secondary"
-   th:if="${products.hasNext()}"
-   th:href="@{/products(page=${products.number+1}, keyword=${keyword}, brand=${brand})}">
-Next
-</a>
+                        <td th:text="${product.productId}">
+                            1
+                        </td>
 
-</div>
 
-</div>
+                        <td>
 
+                            <strong th:text="${product.productName}">
+                                Dell Inspiron Laptop
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted"
+                                   th:text="${product.description}">
+                                Laptop description
+                            </small>
+
+                        </td>
+
+
+                        <td th:text="${product.brand.brandName}">
+                            Dell
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge bg-secondary"
+                                  th:text="${product.productType}">
+
+                                Laptop
+
+                            </span>
+
+                        </td>
+
+
+                        <td th:text="${product.modelNumber}">
+                            DELL-INS-500
+                        </td>
+
+
+                        <td class="fw-bold text-success">
+
+                            $
+                            <span th:text="${#numbers.formatDecimal(product.price, 1, 2)}">
+                                899.99
+                            </span>
+
+                        </td>
+
+
+                        <td th:text="${product.warrantyDate}">
+                            2027-05-15
+                        </td>
+
+
+                        <td>
+
+                            <a th:href="@{/products/{id}(id=${product.productId})}"
+                               class="btn btn-sm btn-primary">
+
+                                View Details
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- Empty results -->
+                    <tr th:if="${products.content.isEmpty()}">
+
+                        <td colspan="8"
+                            class="text-center py-5">
+
+                            <h5 class="text-muted">
+                                No products found
+                            </h5>
+
+                            <p class="text-muted mb-0">
+                                Try changing your search or brand filter.
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+
+                <div class="text-muted">
+
+                    Page
+                    <strong th:text="${products.number + 1}">
+                        1
+                    </strong>
+                    of
+                    <strong th:text="${products.totalPages}">
+                        1
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <!-- Previous -->
+                    <a class="btn btn-outline-secondary me-2"
+                       th:if="${products.hasPrevious()}"
+                       th:href="@{/products(
+                           page=${products.number - 1},
+                           keyword=${keyword},
+                           brand=${brand},
+                           sortBy=${sortBy}
+                       )}">
+
+                        ← Previous
+
+                    </a>
+
+
+                    <!-- Next -->
+                    <a class="btn btn-outline-primary"
+                       th:if="${products.hasNext()}"
+                       th:href="@{/products(
+                           page=${products.number + 1},
+                           keyword=${keyword},
+                           brand=${brand},
+                           sortBy=${sortBy}
+                       )}">
+
+                        Next →
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-4 mt-5">
+
+    <div class="container">
+
+        <h6 class="fw-bold">
+            TechStock Control
+        </h6>
+
+        <p class="text-secondary mb-0">
+            Electronics Inventory Management System
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 

@@ -1,64 +1,115 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Login - TechStock Control</title>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | TechStock Control</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 </head>
 
-<body>
-<div th:replace="~{fragments/navbar :: navbar}"></div>
-<div class="container mt-5">
+<body class="bg-light">
 
-    <div class="card mx-auto shadow" style="max-width:500px;">
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/}">
+            TechStock Control
+        </a>
+    </div>
+</nav>
 
-        <div class="card-header bg-primary text-white">
-            <h3 class="text-center">Login</h3>
-        </div>
+<main class="container py-5">
 
-        <div class="card-body">
-            <div th:if="${param.error}" class="alert alert-danger">
-    Invalid username or password. Please try again.
-</div>
+    <div class="row justify-content-center">
 
-<div th:if="${param.logout}" class="alert alert-success">
-    You have been logged out successfully.
-</div>
+        <div class="col-md-5">
 
-            <form th:action="@{/login}" method="post">
+            <div class="card shadow">
 
-            <input type="hidden"
-                   th:name="${_csrf.parameterName}"
-                   th:value="${_csrf.token}" />
+                <div class="card-body p-4">
 
-            
-                <div class="mb-3">
-                    <label>Username</label>
-                    <input type="text"
-                           name="username"
-                           class="form-control"
-                           required>
+                    <h2 class="text-center mb-4">
+                        Staff Login
+                    </h2>
+
+                    <!-- Invalid login -->
+                    <div th:if="${param.error}"
+                         class="alert alert-danger">
+                        Invalid username or password.
+                    </div>
+
+                    <!-- Successful logout -->
+                    <div th:if="${param.logout}"
+                         class="alert alert-success">
+                        You have been logged out successfully.
+                    </div>
+
+                    <form th:action="@{/login}" method="post">
+
+                        <div class="mb-3">
+
+                            <label for="username"
+                                   class="form-label">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control"
+                                placeholder="Enter username"
+                                required>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label for="password"
+                                   class="form-label">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control"
+                                placeholder="Enter password"
+                                required>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-4">
+
+                        <a th:href="@{/}">
+                            Back to Home
+                        </a>
+
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password"
-                           name="password"
-                           class="form-control"
-                           required>
-                </div>
-
-                <button class="btn btn-primary w-100">
-                    Login
-                </button>
-
-            </form>
+            </div>
 
         </div>
 
     </div>
 
-</div>
+</main>
 
 </body>
 </html>

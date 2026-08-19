@@ -1,64 +1,92 @@
-# TechStock Control 
+# TechStock Control
 
-A Inventory Management System for tracking electronic items across various warehouse locations. 
+An Electronics Inventory Management System for tracking electronic products
+across different warehouse locations.
+
 ## Technologies
--Spring Boot
--Thymeleaf
--Bootstap
 
-Clone the repository : git clone YOUR_REPOSITORY_URL 
-Run application and open - http://localhost: 8080 
+- Spring Boot
+- Thymeleaf
+- Spring Security
+- Spring Data JPA
+- Bootstrap
+- H2 Database
+- MySQL
+-
 
-## Team 
-Jodian Kennedy: -Product Entity
-                - Controllers
-                - Thymeleaf pages
-                - Searching and sorting features 
+## Features
 
+- Product management
+- Product searching and sorting
+- Brand management
+- User registration and login
+- Logout functionality
+- Authorization
+- H2 database for development
+- MySQL database for QA/production
+- YAML configuration with multiple profiles
 
-## Deliverable 1 - Web Front-End & Database  Integration 
--Home page
--About page
--Contact Page
--Sample database records using data.sql
-
-
-
-## Deliverabe 2 - Security and User Management 
-- User Registration 
--Logout functionality
--Role-based authorization 
-
-User roles: Admin
-            Manager
-            Staff
+## Clone the Repository
 
 
-How to run: 
-run: ./mvnw spring-boot:run
-open: http://localhost:8080
+git clone YOUR_REPOSITORY_URL
+cd techstockcontrol
 
-Test Accounts: 
-#Administrator : Username: admin
-Password: admin123
-Role: ADMIN
+The application uses YAML files instead of application.properties.
 
-#Manager: Username: manager
-Password: manager123
-Role: MANAGER
+application.yml 
+application-dev.yml 
+application-qa.yml 
 
-#Staff: Username: staff
-Password: staff123
-Role: STAFF
+SQL credentails : DB_USERNAME & DB_PASSWORD
 
-# Team Contributions
+## User Roles / Test Accounts
+ADMIN 
+Username: admin Pwd: admin123
+MANAGER 
+Username: manager Pwd: manager123
+STAFF 
+Username: staff PWd: staff123
 
-Jodian Kennedy 
-- Admin dashboard
-- Role-based access control
-- User registration
-- User authentication
+## Security Features 
+User login and logout
+User registration
+Role-based access control
+Admin pages restricted to ADMIN Users
 
-# Security Features
-- Admin pages restricted to ADMIN role
-- Unauthorized users receive access denied response
+
+Deliverable 1 - Web Front-End & Database Integration
+Home page
+About page
+Contact page
+Product management
+Sample database records using data.sql
+
+
+Deliverable 2 - Security and User Management
+User registration
+Login functionality
+Logout functionality
+Role-based authorization
+Admin dashboard
+
+
+Deliverable 3 - Configuration, Profiles & Integration
+Migrated from .properties to YAML configuration
+Development profile using H2
+Environment variables for MySQL credentials
+Improved application stability and usability
+
+
+## Team Contributions 
+Jodian Kennedy
+Product Entity
+Controllers
+Thymeleaf pages
+Searching and sorting features
+Admin dashboard
+Role-based access control
+User registration
+User authentication
+YAML profile configuration
+Testing and integration
